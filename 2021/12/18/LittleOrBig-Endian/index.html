@@ -21,15 +21,15 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"wageco.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"width":240},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="大小端(Endian) 在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下  1234567&#x2F;* Initialize CRC lookup table in architecture-dependent manner. *&#x2F;void crcspeed64native_init(crcfn64 fn, uint64_t table[8][256]) &amp;#123;">
+<meta name="description" content="大小端(Endian)还没有写完, 测试blog  在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下  1234567&#x2F;* Initialize CRC lookup table in architecture-dependent manner. *&#x2F;void crcspeed64native_init(crcfn64 fn, uint64_t table[8][2">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LittleOrBig-Endian">
 <meta property="og:url" content="https://wageco.github.io/2021/12/18/LittleOrBig-Endian/index.html">
 <meta property="og:site_name" content="WageCo&#39;s Blog">
-<meta property="og:description" content="大小端(Endian) 在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下  1234567&#x2F;* Initialize CRC lookup table in architecture-dependent manner. *&#x2F;void crcspeed64native_init(crcfn64 fn, uint64_t table[8][256]) &amp;#123;">
+<meta property="og:description" content="大小端(Endian)还没有写完, 测试blog  在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下  1234567&#x2F;* Initialize CRC lookup table in architecture-dependent manner. *&#x2F;void crcspeed64native_init(crcfn64 fn, uint64_t table[8][2">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-18T06:46:43.000Z">
-<meta property="article:modified_time" content="2021-12-20T15:44:20.064Z">
+<meta property="article:modified_time" content="2021-12-20T15:47:41.113Z">
 <meta property="article:author" content="WageCo">
 <meta property="article:tag" content="test">
 <meta name="twitter:card" content="summary">
@@ -230,7 +230,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-12-20 23:44:20" itemprop="dateModified" datetime="2021-12-20T23:44:20+08:00">2021-12-20</time>
+      <time title="Modified: 2021-12-20 23:47:41" itemprop="dateModified" datetime="2021-12-20T23:47:41+08:00">2021-12-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -256,7 +256,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>616</span>
+      <span>628</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -274,7 +274,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="大小端-Endian"><a href="#大小端-Endian" class="headerlink" title="大小端(Endian)"></a>大小端(Endian)</h1><blockquote>
+        <h1 id="大小端-Endian"><a href="#大小端-Endian" class="headerlink" title="大小端(Endian)"></a>大小端(Endian)</h1><p><code>还没有写完, 测试blog</code></p>
+<blockquote>
 <p>在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Initialize CRC lookup table in architecture-dependent manner. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">crcspeed64native_init</span><span class="params">(crcfn64 fn, <span class="keyword">uint64_t</span> table[<span class="number">8</span>][<span class="number">256</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint64_t</span> n = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    *(<span class="keyword">char</span> *)&amp;n ? <span class="built_in">crcspeed64little_init</span>(fn, table)</span><br><span class="line">                : <span class="built_in">crcspeed64big_init</span>(fn, table);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>

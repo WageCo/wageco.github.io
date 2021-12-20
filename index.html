@@ -225,7 +225,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-12-20 23:44:20" itemprop="dateModified" datetime="2021-12-20T23:44:20+08:00">2021-12-20</time>
+      <time title="Modified: 2021-12-20 23:47:41" itemprop="dateModified" datetime="2021-12-20T23:47:41+08:00">2021-12-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -244,7 +244,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">Symbols count in article: </span>
-      <span>616</span>
+      <span>628</span>
     </span>
     <span class="post-meta-item" title="Reading time">
       <span class="post-meta-item-icon">
@@ -262,7 +262,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="大小端-Endian"><a href="#大小端-Endian" class="headerlink" title="大小端(Endian)"></a>大小端(Endian)</h1><blockquote>
+          <h1 id="大小端-Endian"><a href="#大小端-Endian" class="headerlink" title="大小端(Endian)"></a>大小端(Endian)</h1><p><code>还没有写完, 测试blog</code></p>
+<blockquote>
 <p>在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Initialize CRC lookup table in architecture-dependent manner. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">crcspeed64native_init</span><span class="params">(crcfn64 fn, <span class="keyword">uint64_t</span> table[<span class="number">8</span>][<span class="number">256</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint64_t</span> n = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    *(<span class="keyword">char</span> *)&amp;n ? <span class="built_in">crcspeed64little_init</span>(fn, table)</span><br><span class="line">                : <span class="built_in">crcspeed64big_init</span>(fn, table);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
