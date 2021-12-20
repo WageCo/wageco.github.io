@@ -20,29 +20,29 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"wageco.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","width":240,"display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"wageco.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"width":240},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 <meta name="description" content="大小端(Endian) 在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下  1234567&#x2F;* Initialize CRC lookup table in architecture-dependent manner. *&#x2F;void crcspeed64native_init(crcfn64 fn, uint64_t table[8][256]) &amp;#123;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LittleOrBig-Endian_cn">
-<meta property="og:url" content="https://wageco.github.io/2021/12/18/LittleOrBig-Endian-cn/index.html">
+<meta property="og:title" content="LittleOrBig-Endian">
+<meta property="og:url" content="https://wageco.github.io/2021/12/18/LittleOrBig-Endian/index.html">
 <meta property="og:site_name" content="WageCo&#39;s Blog">
 <meta property="og:description" content="大小端(Endian) 在redis源码中CRC循环冗余校验码中看到一个关于大小端的简单判断, 代码如下  1234567&#x2F;* Initialize CRC lookup table in architecture-dependent manner. *&#x2F;void crcspeed64native_init(crcfn64 fn, uint64_t table[8][256]) &amp;#123;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2021-12-18T06:46:43.000Z">
-<meta property="article:modified_time" content="2021-12-20T14:23:38.056Z">
+<meta property="article:modified_time" content="2021-12-20T15:39:54.394Z">
 <meta property="article:author" content="WageCo">
 <meta property="article:tag" content="test">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://wageco.github.io/2021/12/18/LittleOrBig-Endian-cn/">
+<link rel="canonical" href="https://wageco.github.io/2021/12/18/LittleOrBig-Endian/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://wageco.github.io/2021/12/18/LittleOrBig-Endian-cn/","path":"2021/12/18/LittleOrBig-Endian-cn/","title":"LittleOrBig-Endian_cn"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://wageco.github.io/2021/12/18/LittleOrBig-Endian/","path":"2021/12/18/LittleOrBig-Endian/","title":"LittleOrBig-Endian"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>LittleOrBig-Endian_cn | WageCo's Blog</title>
+<title>LittleOrBig-Endian | WageCo's Blog</title>
   
 
 
@@ -88,7 +88,8 @@
   <ul class="main-menu menu">
         <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li>
         <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags<span class="badge">1</span></a></li>
-        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">2</span></a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories<span class="badge">1</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives<span class="badge">1</span></a></li>
   </ul>
 </nav>
 
@@ -119,7 +120,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F%E7%AB%AF-Endian"><span class="nav-number">1.</span> <span class="nav-text">大小端(Endian)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%A7%E5%B0%8F%E7%AB%AF"><span class="nav-number">1.1.</span> <span class="nav-text">1. 什么是大小端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.2.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F%E7%AB%AF-Endian"><span class="nav-number">1.</span> <span class="nav-text">大小端(Endian)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%A7%E5%B0%8F%E7%AB%AF"><span class="nav-number">1.1.</span> <span class="nav-text">什么是大小端</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -134,25 +135,31 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">1</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
-      <div class="site-state-item site-state-tags">
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
         <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">tags</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
 </div>
   <div class="links-of-author site-overview-item animated">
       <span class="links-of-author-item">
-        <a href="https://github.com/wageco" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wageco" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+        <a href="https://github.com/wageco" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wageco" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:wuteng.wageco@foxmail.com" title="E-Mail → mailto:wuteng.wageco@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+        <a href="mailto:wuteng.wageco@foxmail.com" title="E-Mail → mailto:wuteng.wageco@foxmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://twitter.com/Backb_WT" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Backb_WT" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+        <a href="https://twitter.com/Backb_WT" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;Backb_WT" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
       </span>
   </div>
   <div class="cc-license site-overview-item animated" itemprop="license">
@@ -192,7 +199,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://wageco.github.io/2021/12/18/LittleOrBig-Endian-cn/">
+    <link itemprop="mainEntityOfPage" href="https://wageco.github.io/2021/12/18/LittleOrBig-Endian/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.jpg">
@@ -205,7 +212,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          LittleOrBig-Endian_cn
+          LittleOrBig-Endian
         </h1>
 
         <div class="post-meta-container">
@@ -223,10 +230,41 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2021-12-20 22:23:38" itemprop="dateModified" datetime="2021-12-20T22:23:38+08:00">2021-12-20</time>
+      <time title="Modified: 2021-12-20 23:39:54" itemprop="dateModified" datetime="2021-12-20T23:39:54+08:00">2021-12-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CS-Base/" itemprop="url" rel="index"><span itemprop="name">CS_Base</span></a>
+        </span>
     </span>
 
   
+    <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">Views: </span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="Symbols count in article">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">Symbols count in article: </span>
+      <span>616</span>
+    </span>
+    <span class="post-meta-item" title="Reading time">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">Reading time &asymp;</span>
+      <span>1 mins.</span>
+    </span>
 </div>
 
         </div>
@@ -242,8 +280,8 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Initialize CRC lookup table in architecture-dependent manner. */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">crcspeed64native_init</span><span class="params">(crcfn64 fn, <span class="keyword">uint64_t</span> table[<span class="number">8</span>][<span class="number">256</span>])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">uint64_t</span> n = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    *(<span class="keyword">char</span> *)&amp;n ? <span class="built_in">crcspeed64little_init</span>(fn, table)</span><br><span class="line">                : <span class="built_in">crcspeed64big_init</span>(fn, table);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>可以看到这个判断十分简洁</p>
-<h2 id="1-什么是大小端"><a href="#1-什么是大小端" class="headerlink" title="1. 什么是大小端"></a>1. 什么是大小端</h2><p>大小端是指大端模式与小端模式, 而大端模式与小端模式说的是<strong>字节序</strong>, 在计算机中, 数据是以二进制的形式存放在内存中, 我们以1个字节(byte)为1个存储单元(用两位十六进制数据表示1个字节的数据), 1个字节表示8位bit数据, 1个bit就是1个二进制数据(0 or 1), 字节是内存中的最小可寻址单元，由连续的多个bit组成. 如c++中, 在64位下, char类型是1个字节大小,  int类型是4个字节大小. 如果是char类型, 我们可以很容易的知道数据是如何排列在计算机中, 而如果超过1个字节, 如int(4个字节), 那么我们就得考虑这4个字节该如何排序, 毕竟排序不同, 数据的值也不一样.</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%A4%A7%E5%B0%8F%E7%AB%AF%E6%A8%A1%E5%BC%8F/6750542">https://baike.baidu.com/item/%E5%A4%A7%E5%B0%8F%E7%AB%AF%E6%A8%A1%E5%BC%8F/6750542</a><br>[2] <a target="_blank" rel="noopener" href="https://liam.page/2021/06/05/memory-model-cpp/">https://liam.page/2021/06/05/memory-model-cpp/</a></p>
+<h2 id="什么是大小端"><a href="#什么是大小端" class="headerlink" title="什么是大小端"></a>什么是大小端</h2><p>大小端是指大端模式与小端模式, 而大端模式与小端模式说的是<strong>字节序</strong>, 在计算机中, 数据是以二进制的形式存放在内存中, 我们以1个字节(byte)为1个存储单元(用两位十六进制数据表示1个字节的数据), 1个字节表示8位bit数据, 1个bit就是1个二进制数据(0 or 1), 字节是内存中的最小可寻址单元，由连续的多个bit组成. 如c++中, 在64位下, char类型是1个字节大小,  int类型是4个字节大小. 如果是char类型, 我们可以很容易的知道数据是如何排列在计算机中, 而如果超过1个字节, 如int(4个字节), 那么我们就得考虑这4个字节该如何排序, 毕竟排序不同, 数据的值也不一样.</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p>[1] <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%A4%A7%E5%B0%8F%E7%AB%AF%E6%A8%A1%E5%BC%8F/6750542">大小端模式_百度百科</a><br>[2] <a target="_blank" rel="noopener" href="https://liam.page/2021/06/05/memory-model-cpp/">程序员的自我修养(十):C++的内存模型</a></p>
 
     </div>
 
@@ -275,7 +313,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>Post link: </strong>
-      <a href="https://wageco.github.io/2021/12/18/LittleOrBig-Endian-cn/" title="LittleOrBig-Endian_cn">https://wageco.github.io/2021/12/18/LittleOrBig-Endian-cn/</a>
+      <a href="https://wageco.github.io/2021/12/18/LittleOrBig-Endian/" title="LittleOrBig-Endian">https://wageco.github.io/2021/12/18/LittleOrBig-Endian/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC</a> unless stating additionally.
@@ -289,15 +327,6 @@
 
         
 
-          <div class="post-nav">
-            <div class="post-nav-item">
-            </div>
-            <div class="post-nav-item">
-                <a href="/2021/12/20/hello-world/" rel="next" title="Hello World">
-                  Hello World <i class="fa fa-chevron-right"></i>
-                </a>
-            </div>
-          </div>
     </footer>
   </article>
 </div>
@@ -322,6 +351,38 @@
   </span>
   <span class="author" itemprop="copyrightHolder">WageCo</span>
 </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">1k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">1 mins.</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
   <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
   </div>
 
@@ -339,6 +400,7 @@
 
 
   
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
 
