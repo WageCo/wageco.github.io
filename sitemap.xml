@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/</loc>
+    
+    <lastmod>2022-01-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://wageco.github.io/2022/01/09/RGB-AND-YUV/</loc>
     
     <lastmod>2022-01-09</lastmod>
@@ -40,7 +49,7 @@
 
   <url>
     <loc>https://wageco.github.io/</loc>
-    <lastmod>2022-01-09</lastmod>
+    <lastmod>2022-01-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -48,14 +57,42 @@
   
   <url>
     <loc>https://wageco.github.io/tags/test/</loc>
-    <lastmod>2022-01-09</lastmod>
+    <lastmod>2022-01-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/tags/GLIBC/</loc>
+    <lastmod>2022-01-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/tags/C/</loc>
+    <lastmod>2022-01-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/tags/CMAKE/</loc>
+    <lastmod>2022-01-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/tags/GCC/</loc>
+    <lastmod>2022-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://wageco.github.io/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2022-01-09</lastmod>
+    <lastmod>2022-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -64,7 +101,14 @@
   
   <url>
     <loc>https://wageco.github.io/categories/CS-Base/</loc>
-    <lastmod>2022-01-09</lastmod>
+    <lastmod>2022-01-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/categories/tools/</loc>
+    <lastmod>2022-01-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
