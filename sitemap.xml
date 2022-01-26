@@ -56,13 +56,6 @@
 
   
   <url>
-    <loc>https://wageco.github.io/tags/test/</loc>
-    <lastmod>2022-01-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://wageco.github.io/tags/GLIBC/</loc>
     <lastmod>2022-01-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -97,17 +90,24 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://wageco.github.io/tags/test/</loc>
+    <lastmod>2022-01-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
-    <loc>https://wageco.github.io/categories/CS-Base/</loc>
+    <loc>https://wageco.github.io/categories/tools/</loc>
     <lastmod>2022-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://wageco.github.io/categories/tools/</loc>
+    <loc>https://wageco.github.io/categories/CS-Base/</loc>
     <lastmod>2022-01-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
