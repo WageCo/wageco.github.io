@@ -22,12 +22,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"wageco.github.io","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"width":240},"copycode":true,"bookmark":{"enable":true,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&#x2F;opt&#x2F;glibc-2.">
+    <meta name="description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&amp;#x">
 <meta property="og:type" content="article">
 <meta property="og:title" content="调用Cmake连接指定的GLIBC">
 <meta property="og:url" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/index.html">
 <meta property="og:site_name" content="WageCo&#39;s Blog">
-<meta property="og:description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&#x2F;opt&#x2F;glibc-2.">
+<meta property="og:description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&amp;#x">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png">
 <meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-2.png">
@@ -294,7 +294,7 @@
 </blockquote>
 <p><code>configure</code> 设置一下安装路径</p>
 <blockquote>
-<p>./configure –prefix=/opt/glibc-2.34</p>
+<p>.&#x2F;configure –prefix&#x3D;&#x2F;opt&#x2F;glibc-2.34</p>
 </blockquote>
 <p><code>--prefix=</code> 你要存放的路径(建议不要覆盖自带的GLIBC)</p>
 <span id="more"></span>
@@ -306,7 +306,7 @@
 <blockquote>
 <p>sudo make install</p>
 </blockquote>
-<p><code>sudo</code> 因为我是安装到/opt目录下, 所以需要<code>sudo</code></p>
+<p><code>sudo</code> 因为我是安装到&#x2F;opt目录下, 所以需要<code>sudo</code></p>
 <h2 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h2><p>转自 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9705660/check-glibc-version-for-a-particular-gcc-compiler">https://stackoverflow.com/questions/9705660/check-glibc-version-for-a-particular-gcc-compiler</a></p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span>  __GLIBC__</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;gnu/libc-version.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __GLIBC__</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;GNU libc compile-time version: %u.%u\n&quot;</span>, __GLIBC__,  __GLIBC_MINOR__);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;GNU libc runtime version:      %s\n&quot;</span>, <span class="built_in">gnu_get_libc_version</span>());</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Not the GNU C Library&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
