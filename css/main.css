@@ -632,7 +632,7 @@ pre figcaption a:hover {
 }
 pre,
 code {
-  font-family: consolas, Menlo, monospace, 'PingFang SC', 'Microsoft YaHei';
+  font-family: Source Code Pro, consolas, Menlo, monospace, 'PingFang SC', 'Microsoft YaHei';
 }
 code {
   border-radius: 3px;
@@ -3034,7 +3034,7 @@ hr {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #feffff;
+  background: #ff9c09;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
