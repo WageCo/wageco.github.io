@@ -4,6 +4,15 @@
   <url>
     <loc>https://wageco.github.io/about/index.html</loc>
     
+    <lastmod>2022-06-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/2022/03/13/2022-3-13-Economics/</loc>
+    
     <lastmod>2022-04-10</lastmod>
     
     <changefreq>monthly</changefreq>
@@ -58,22 +67,29 @@
 
   <url>
     <loc>https://wageco.github.io/</loc>
-    <lastmod>2022-04-10</lastmod>
+    <lastmod>2022-06-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
   <url>
+    <loc>https://wageco.github.io/tags/%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%8E%9F%E7%90%86/</loc>
+    <lastmod>2022-06-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://wageco.github.io/tags/C/</loc>
-    <lastmod>2022-04-10</lastmod>
+    <lastmod>2022-06-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://wageco.github.io/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80/</loc>
-    <lastmod>2022-04-10</lastmod>
+    <lastmod>2022-06-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -81,8 +97,15 @@
 
   
   <url>
+    <loc>https://wageco.github.io/categories/%E9%A2%9D%E5%A4%96%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2022-06-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://wageco.github.io/categories/C-%E7%9B%B8%E5%85%B3/</loc>
-    <lastmod>2022-04-10</lastmod>
+    <lastmod>2022-06-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
