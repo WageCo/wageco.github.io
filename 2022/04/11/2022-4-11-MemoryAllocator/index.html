@@ -13,14 +13,14 @@
 <meta property="og:site_name" content="WageCo&#39;s Blog">
 <meta property="og:description" content="如何实现一个简单内存分配具体代码可以参考我这里实现的简单动态内存分配这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wageco.github.io/.io//2022-4-11-MemoryAllocator/MemoryLayout.png">
-<meta property="og:image" content="https://wageco.github.io/.io//MemoryMalloc.png">
+<meta property="og:image" content="https://wageco.github.io/.io//04/11/2022-4-11-MemoryAllocator/MemoryLayout.png">
+<meta property="og:image" content="https://wageco.github.io/.io//04/11/2022-4-11-MemoryAllocator/MemoryMalloc.png">
 <meta property="article:published_time" content="2022-04-10T16:09:47.000Z">
-<meta property="article:modified_time" content="2024-11-10T06:07:02.338Z">
+<meta property="article:modified_time" content="2024-11-10T06:13:25.919Z">
 <meta property="article:author" content="WageCo">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://wageco.github.io/.io//2022-4-11-MemoryAllocator/MemoryLayout.png">
+<meta name="twitter:image" content="https://wageco.github.io/.io//04/11/2022-4-11-MemoryAllocator/MemoryLayout.png">
     
     
       
@@ -179,7 +179,7 @@
 <li>heap<br>这里主要是动态分配的数据，也叫堆</li>
 <li>stack<br>这里是局部变量等非动态分配的数据，也叫栈</li>
 </ul>
-<p><img src="/.io//2022-4-11-MemoryAllocator/MemoryLayout.png" alt="MemoryLayout"></p>
+<p><img src="/.io//04/11/2022-4-11-MemoryAllocator/MemoryLayout.png" alt="MemoryLayout"></p>
 <blockquote>
 <p>可以看到堆和栈的增长方式是<strong>相对生长</strong>  </p>
 </blockquote>
@@ -218,7 +218,7 @@
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 16 位对齐</span></span><br><span class="line"><span class="type">const</span> <span class="type">unsigned</span> align_to = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">char</span> ALIGN[align_to];</span><br><span class="line"><span class="comment">// 标头</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> <span class="title class_">header</span> &#123;</span><br><span class="line">  <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line">  &#125; head;</span><br><span class="line">  ALIGN align;</span><br><span class="line">&#125; <span class="type">header_t</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img src="/.io//MemoryMalloc.png" alt="MemoryMalloc"></p>
+<p><img src="/.io//04/11/2022-4-11-MemoryAllocator/MemoryMalloc.png" alt="MemoryMalloc"></p>
 <h2 id="关于内存对齐问题"><a href="#关于内存对齐问题" class="headerlink" title="关于内存对齐问题"></a>关于内存对齐问题</h2><p>我们调用sbrk分配空间的时候, 为了提高Cpu读取的效率, 我们需要进行内存对齐</p>
 <p>例如 我们的Cpu每次读取16个字节<br>如果 分配的内存是16的n倍, 那么只需要读取n次即可<br>但是如果不是, 那么就会读取超过n次</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">假设XXXX为其他数据, OOOO为我们分配的数据</span><br><span class="line">分配同样大小的空间</span><br><span class="line"></span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX XXXX </span><br><span class="line">Cpu 读取  -&gt; OOOO OOOO OOOO OOOO</span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX XXXX</span><br><span class="line">如上排列, Cpu只需要读1次, 就可以获取我们分配的空间</span><br><span class="line"></span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX OOOO  </span><br><span class="line">Cpu 读取  -&gt; OOOO OOOO OOOO XXXX</span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX XXXX</span><br><span class="line">这样排列, Cpu就需要读2次</span><br></pre></td></tr></table></figure>
