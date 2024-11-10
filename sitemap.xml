@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://wageco.github.io/about/index.html</loc>
+    <loc>https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/</loc>
     
     <lastmod>2024-11-10</lastmod>
     
@@ -11,9 +11,18 @@
   </url>
   
   <url>
-    <loc>https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/</loc>
+    <loc>https://wageco.github.io/search/index.html</loc>
     
-    <lastmod>2024-11-03</lastmod>
+    <lastmod>2024-11-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://wageco.github.io/about/index.html</loc>
+    
+    <lastmod>2024-11-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
