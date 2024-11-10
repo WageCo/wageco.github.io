@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>WageCo&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+  <meta name="description" content="你好，世界">
+<meta property="og:type" content="website">
+<meta property="og:title" content="WageCo&#39;s Blog">
+<meta property="og:url" content="https://wageco.github.io/index.html">
+<meta property="og:site_name" content="WageCo&#39;s Blog">
+<meta property="og:description" content="你好，世界">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="WageCo">
+<meta name="twitter:card" content="summary"><meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">WageCo&#39;s Blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      
+  
+    <article id="post-2022-4-11-MemoryAllocator" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="name">
+      <a href="/2022/04/11/2022-4-11-MemoryAllocator/">Custom Memory Allocator</a>
+      
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2022-04-10T16:09:47.000Z" itemprop="datePublished">四月 11, 2022, 12:09 凌晨</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="如何实现一个简单内存分配"><a href="#如何实现一个简单内存分配" class="headerlink" title="如何实现一个简单内存分配"></a>如何实现一个简单内存分配</h1><p>具体代码可以参考我这里实现的<a target="_blank" rel="noopener" href="https://github.com/WageCo/mmemory">简单动态内存分配</a><br>这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。</p>
+      
+    </div>
+    
+      <div class="article-more-link">
+        <a href="/2022/04/11/2022-4-11-MemoryAllocator/#more">read more</a>
+      </div>
+    
+    
+    
+  </div>
+</article>
+
+
+
+  
+    <article id="post-GCCLinkNewGlibc" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="name">
+      <a href="/2022/01/26/GCCLinkNewGlibc/">调用Cmake连接指定的GLIBC</a>
+      
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2022-01-25T16:48:47.000Z" itemprop="datePublished">一月 26, 2022, 12:48 凌晨</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="如何使用CMAKE或者GCC连接指定的GLIBC运行程序"><a href="#如何使用CMAKE或者GCC连接指定的GLIBC运行程序" class="headerlink" title="如何使用CMAKE或者GCC连接指定的GLIBC运行程序"></a>如何使用CMAKE或者GCC连接指定的GLIBC运行程序</h1><h2 id="安装新的GLIBC-2-34"><a href="#安装新的GLIBC-2-34" class="headerlink" title="安装新的GLIBC 2.34"></a>安装新的GLIBC 2.34</h2><p><code>wget</code> 下载源码包</p>
+<blockquote>
+<p>wget <a target="_blank" rel="noopener" href="https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz">https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz</a></p>
+</blockquote>
+<p><code>tar</code> 解压压缩包</p>
+<blockquote>
+<p>tar xzfv glibc-2.34.tar.gz</p>
+</blockquote>
+<p><code>configure</code> 设置一下安装路径</p>
+<blockquote>
+<p>.&#x2F;configure –prefix&#x3D;&#x2F;opt&#x2F;glibc-2.34</p>
+</blockquote>
+<p><code>--prefix=</code> 你要存放的路径(建议不要覆盖自带的GLIBC)</p>
+      
+    </div>
+    
+      <div class="article-more-link">
+        <a href="/2022/01/26/GCCLinkNewGlibc/#more">read more</a>
+      </div>
+    
+    
+    
+  </div>
+</article>
+
+
+
+  
+    <article id="post-RGB-AND-YUV" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="name">
+      <a href="/2022/01/09/RGB-AND-YUV/">RGB_AND_YUV</a>
+      
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2022-01-09T14:59:37.000Z" itemprop="datePublished">一月 9, 2022, 10:59 晚上</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <h1 id="色彩模型"><a href="#色彩模型" class="headerlink" title="色彩模型"></a>色彩模型</h1><h2 id="RGB"><a href="#RGB" class="headerlink" title="RGB"></a>RGB</h2><p>通过对R, G, B三个颜色通道的变化, 并把他们相互叠加, 显示多种色彩.</p>
+<h3 id="RGB颜色标准"><a href="#RGB颜色标准" class="headerlink" title="RGB颜色标准"></a>RGB颜色标准</h3><p><code>R</code>: red, <code>G</code>: green, <code>B</code>: blue.</p>
+<blockquote>
+<p>此三基色可以根据占比不同组建其他颜色.</p>
+</blockquote>
+<h3 id="RGB格式标准"><a href="#RGB格式标准" class="headerlink" title="RGB格式标准"></a>RGB格式标准</h3><p><strong>RGB后面的位数表示1个像素所使用的位数.</strong></p>
+<p>RGB1, RGB4, RGB8, RGB16, RGB24, RGB32, ARGB32.</p>
+      
+    </div>
+    
+      <div class="article-more-link">
+        <a href="/2022/01/09/RGB-AND-YUV/#more">read more</a>
+      </div>
+    
+    
+    
+  </div>
+</article>
+
+
+
+  
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+<div id="settings-container">
+  <div id="dark-mode">dark</div>
+  <div id="sans-font">sans</div>
+</div>
+<script type="text/javascript">
+let d=document,r=d.documentElement.style,f=r.setProperty.bind(r),l=localStorage,s=l.getItem('s')||(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches),n=l.getItem('n'),m=d.getElementById("dark-mode"),b=()=>{f('--bg-color','#fafafa');f('--code-bg-color','#f4f4f4');f('--text-color','#212121');f('--secondary-color','#808080');f('--tertiary-color','#b0b0b0');f('--link-color','#b5c8cf');f('--link-hover-color','#618794');f('--link-bg-color','#dae4e7');f('--selection-color','#dae4e7');m.innerHTML="dark"},c=()=>{f('--bg-color','#212121');f('--code-bg-color','#292929');f('--text-color','#fff');f('--secondary-color','#c0c0c0');f('--tertiary-color','#6e6e6e');f('--link-color','#4d6b75');f('--link-hover-color','#96b1bb');f('--link-bg-color','#5d828e');f('--selection-color','#acc1c9');m.innerHTML="light"},o=d.getElementById("sans-font"),e=()=>{f('--body-stack','"Lora", "Georgia", "Times New Roman", serif');o.innerHTML="sans"},g=()=>{f('--body-stack','"Lato", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Verdana", sans-serif');o.innerHTML="serif"};m.onclick=()=>{if(s==2){s=1;l.setItem('s',s);c()}else{s=2;l.setItem('s',s);b()}};o.onclick=()=>{if(n==2){n=1;l.setItem('n',n);g()}else{n=2;l.setItem('n',n);e()}};if(!s){s=2;l.setItem('s',2)};if(s==1){c()};if(!n){n=2;l.setItem('n',2)};if(n==1){g()};
+</script>
+
+
+
+
+</body>
+</html>
