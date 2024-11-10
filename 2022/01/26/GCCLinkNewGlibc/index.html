@@ -13,15 +13,15 @@
 <meta property="og:site_name" content="WageCo&#39;s Blog">
 <meta property="og:description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&amp;#x">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://wageco.github.io/.io//GCCLinkNewGlibc-1.png">
-<meta property="og:image" content="https://wageco.github.io/.io//GCCLinkNewGlibc-2.png">
-<meta property="og:image" content="https://wageco.github.io/.io//GCCLinkNewGlibc-3.png">
+<meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png">
+<meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-2.png">
+<meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-3.png">
 <meta property="article:published_time" content="2022-01-25T16:48:47.000Z">
 <meta property="article:modified_time" content="2024-11-03T16:57:02.718Z">
 <meta property="article:author" content="WageCo">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://wageco.github.io/.io//GCCLinkNewGlibc-1.png">
+<meta name="twitter:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png">
     
     
       
@@ -210,17 +210,17 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span>  __GLIBC__</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;gnu/libc-version.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __GLIBC__</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;GNU libc compile-time version: %u.%u\n&quot;</span>, __GLIBC__,  __GLIBC_MINOR__);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;GNU libc runtime version:      %s\n&quot;</span>, <span class="built_in">gnu_get_libc_version</span>());</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Not the GNU C Library&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>简单运行一遍</p>
-<p><img src="/.io//GCCLinkNewGlibc-1.png" alt="GCCLinkNewGlibc-1"></p>
+<p><img src="/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png" alt="GCCLinkNewGlibc-1"></p>
 <blockquote>
 <p>我系统自带的是GLIBC3.31</p>
 </blockquote>
 <h2 id="GCC编译命令"><a href="#GCC编译命令" class="headerlink" title="GCC编译命令"></a>GCC编译命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -std=c++11 ../helloworld.cc -Wl,--rpath=/opt/glibc-2.34/lib -Wl,--dynamic-linker=/opt/glibc-2.34/lib/ld-linux-x86-64.so.2</span><br></pre></td></tr></table></figure>
 <p><code>-Wl,--rpath=</code> 重新指定库的路径<br><code>-Wl,--dynamic-linker=</code> 指定动态连接库</p>
-<p><img src="/.io//GCCLinkNewGlibc-2.png" alt="GCCLinkNewGlibc-2"></p>
+<p><img src="/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-2.png" alt="GCCLinkNewGlibc-2"></p>
 <h2 id="CMAKE编译"><a href="#CMAKE编译" class="headerlink" title="CMAKE编译"></a>CMAKE编译</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.15</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(helloworld)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(./)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_compile_options</span>(<span class="string">&quot;-std=c++11&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;-Wl,--rpath=/opt/glibc-2.34/lib -Wl,--dynamic-linker=/opt/glibc-2.34/lib/ld-linux-x86-64.so.2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(hello helloworld.cc)</span><br></pre></td></tr></table></figure>
 
 <p>主要的是<code>add_compile_options</code>中关于<code>CXXFLAGS</code>,其实这个跟GCC一样</p>
-<p><img src="/.io//GCCLinkNewGlibc-3.png" alt="GCCLinkNewGlibc-3"></p>
+<p><img src="/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-3.png" alt="GCCLinkNewGlibc-3"></p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>调用<code>rpath</code>以及<code>dynamic-linker</code>可以指定<code>GLIBC</code></p>
 
   </div>
