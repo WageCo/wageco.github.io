@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="如何实现一个简单内存分配具体代码可以参考我这里实现的简单动态内存分配这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Custom Memory Allocator">
+<meta property="og:url" content="https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/index.html">
+<meta property="og:site_name" content="WageCo&#39;s Blog">
+<meta property="og:description" content="如何实现一个简单内存分配具体代码可以参考我这里实现的简单动态内存分配这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/MemoryLayout.png">
+<meta property="og:image" content="https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/MemoryMalloc.png">
+<meta property="article:published_time" content="2022-04-10T16:09:47.000Z">
+<meta property="article:modified_time" content="2025-05-16T17:30:36.503Z">
+<meta property="article:author" content="WageCo">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/MemoryLayout.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Custom Memory Allocator</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2022/01/26/GCCLinkNewGlibc/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&text=Custom Memory Allocator"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&is_video=false&description=Custom Memory Allocator"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Custom Memory Allocator&body=Check out this article: https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&name=Custom Memory Allocator&description=&lt;h1 id=&#34;如何实现一个简单内存分配&#34;&gt;&lt;a href=&#34;#如何实现一个简单内存分配&#34; class=&#34;headerlink&#34; title=&#34;如何实现一个简单内存分配&#34;&gt;&lt;/a&gt;如何实现一个简单内存分配&lt;/h1&gt;&lt;p&gt;具体代码可以参考我这里实现的&lt;a href=&#34;https://github.com/WageCo/mmemory&#34;&gt;简单动态内存分配&lt;/a&gt;&lt;br&gt;这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&t=Custom Memory Allocator"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">如何实现一个简单内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%93%8D%E6%8E%A7brk%E6%8C%87%E9%92%88"><span class="toc-number">1.1.</span> <span class="toc-text">如何操控brk指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%A4%B4%E9%83%A8%E5%88%86"><span class="toc-number">1.2.</span> <span class="toc-text">添加头部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.</span> <span class="toc-text">关于内存对齐问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#malloc%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">1.4.</span> <span class="toc-text">malloc核心代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#free%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">1.5.</span> <span class="toc-text">free核心代码</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Custom Memory Allocator
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">WageCo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-04-10T16:09:47.000Z" class="dt-published" itemprop="datePublished">2022-04-11</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/C-%E7%9B%B8%E5%85%B3/">C++相关</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/C/" rel="tag">C++</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="如何实现一个简单内存分配"><a href="#如何实现一个简单内存分配" class="headerlink" title="如何实现一个简单内存分配"></a>如何实现一个简单内存分配</h1><p>具体代码可以参考我这里实现的<a target="_blank" rel="noopener" href="https://github.com/WageCo/mmemory">简单动态内存分配</a><br>这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。</p>
+<span id="more"></span>
+
+<p>在实现这个问题之前，我们需要了解一下程序中的内存布局。</p>
+<ul>
+<li>text<br>存放要由处理器执行的二进制指令的部分。</li>
+<li>data、<br>存放非零初始化的静态数据</li>
+<li>bss<br>存放初始化为零的静态数据，并且未初始化的静态数据被初始化为零后将合并到这个区域</li>
+<li>heap<br>这里主要是动态分配的数据，也叫堆</li>
+<li>stack<br>这里是局部变量等非动态分配的数据，也叫栈</li>
+</ul>
+<p><img src="/2022/04/11/2022-4-11-MemoryAllocator/MemoryLayout.png" alt="MemoryLayout"></p>
+<blockquote>
+<p>可以看到堆和栈的增长方式是<strong>相对生长</strong>  </p>
+</blockquote>
+<blockquote>
+<p>开始有个一个指针叫做<strong>program break</strong>或者<strong>brk</strong>,他是与bss重合的,当开始分配的内存，brk会上升，其中增大的内存空间为heap。</p>
+</blockquote>
+<blockquote>
+<p>所以当我们需要动态分配空间的时候，需要请求系统，系统内部接口会帮助我们增大brk指针</p>
+</blockquote>
+<blockquote>
+<p>相反，当我们需要释放空间的时候，也需要请求系统，系统内部接口会帮助我们减小brk指针</p>
+</blockquote>
+<h2 id="如何操控brk指针"><a href="#如何操控brk指针" class="headerlink" title="如何操控brk指针"></a>如何操控brk指针</h2><blockquote>
+<p>本文使用的是<strong>linux操作系统</strong>。系统接口函数为 <strong>sbrk()</strong><br>当然也可以使用 <strong>brk()</strong> 这个系统调用。</p>
+</blockquote>
+<blockquote>
+<p>具体使用方法可以通过命令 <strong>man sbrk</strong> 来查看。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sbrk</span>(<span class="number">0</span>); <span class="comment">// 获取当前brk指针</span></span><br><span class="line"><span class="built_in">sbrk</span>(n); <span class="comment">// 分配大小为n个字节的内存空间, brk指针增大n个字节, 返回分配的起始地址</span></span><br><span class="line"><span class="built_in">sbrk</span>(-n); <span class="comment">// 释放大小为n个字节的内存空间, brk指针减小n个字节, 返回分配的起始地址</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>申请或者释放total_size个字节空间</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *now_addr = <span class="built_in">sbrk</span>(total_size);</span><br><span class="line"><span class="keyword">if</span> (now_addr == (<span class="type">void</span> *)<span class="number">-1</span>) &#123; </span><br><span class="line">  <span class="comment">// failed</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s errno: %s\n&quot;</span>, __func__, <span class="built_in">strerror</span>(errno));</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>由于每次分配内存返回的是其实地址, 考虑到释放问题, 我们每次分配都需要添加一个头结构体, 用来保存一下用户需要分配的内存大小, 以及进行填充来实现内存对齐。</p>
+</blockquote>
+<h2 id="添加头部分"><a href="#添加头部分" class="headerlink" title="添加头部分"></a>添加头部分</h2><blockquote>
+<p>我这里实现的是对齐16个字节</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 16 位对齐</span></span><br><span class="line"><span class="type">const</span> <span class="type">unsigned</span> align_to = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">char</span> ALIGN[align_to];</span><br><span class="line"><span class="comment">// 标头</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> <span class="title class_">header</span> &#123;</span><br><span class="line">  <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line">    <span class="keyword">union</span> <span class="title class_">header</span> *pre;</span><br><span class="line">    <span class="keyword">union</span> <span class="title class_">header</span> *next;</span><br><span class="line">  &#125; head;</span><br><span class="line">  ALIGN align;</span><br><span class="line">&#125; <span class="type">header_t</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>其实这里可以化简, 不需要指向下一个以及上一个被分配的空间的指针</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 16 位对齐</span></span><br><span class="line"><span class="type">const</span> <span class="type">unsigned</span> align_to = <span class="number">16</span>;</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">char</span> ALIGN[align_to];</span><br><span class="line"><span class="comment">// 标头</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span> <span class="title class_">header</span> &#123;</span><br><span class="line">  <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="type">size_t</span> size;</span><br><span class="line">  &#125; head;</span><br><span class="line">  ALIGN align;</span><br><span class="line">&#125; <span class="type">header_t</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2022/04/11/2022-4-11-MemoryAllocator/MemoryMalloc.png" alt="MemoryMalloc"></p>
+<h2 id="关于内存对齐问题"><a href="#关于内存对齐问题" class="headerlink" title="关于内存对齐问题"></a>关于内存对齐问题</h2><p>我们调用sbrk分配空间的时候, 为了提高Cpu读取的效率, 我们需要进行内存对齐</p>
+<p>例如 我们的Cpu每次读取16个字节<br>如果 分配的内存是16的n倍, 那么只需要读取n次即可<br>但是如果不是, 那么就会读取超过n次</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">假设XXXX为其他数据, OOOO为我们分配的数据</span><br><span class="line">分配同样大小的空间</span><br><span class="line"></span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX XXXX </span><br><span class="line">Cpu 读取  -&gt; OOOO OOOO OOOO OOOO</span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX XXXX</span><br><span class="line">如上排列, Cpu只需要读1次, 就可以获取我们分配的空间</span><br><span class="line"></span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX OOOO  </span><br><span class="line">Cpu 读取  -&gt; OOOO OOOO OOOO XXXX</span><br><span class="line">Cpu 读取  -&gt; XXXX XXXX XXXX XXXX</span><br><span class="line">这样排列, Cpu就需要读2次</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这就是内存对齐的好处</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果要分配size个字节, 那么实际要分配total_size个字节</span></span><br><span class="line"><span class="type">size_t</span> total_size = (<span class="built_in">sizeof</span>(<span class="type">header_t</span>) + size + align_to - <span class="number">1</span>) &amp; ~(align_to - <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>其实就是使得每次分配的内存空间(包含头以及填充), 使得为16的整数倍</p>
+<h2 id="malloc核心代码"><a href="#malloc核心代码" class="headerlink" title="malloc核心代码"></a>malloc核心代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// malloc memory space</span></span><br><span class="line"><span class="type">void</span> *now_addr = <span class="built_in">sbrk</span>(total_size);</span><br><span class="line">  <span class="comment">// failed</span></span><br><span class="line"><span class="keyword">if</span> (now_addr == (<span class="type">void</span> *)<span class="number">-1</span>) &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s errno: %s\n&quot;</span>, __func__, <span class="built_in">strerror</span>(errno));</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="free核心代码"><a href="#free核心代码" class="headerlink" title="free核心代码"></a>free核心代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// free memory space</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">sbrk</span>(<span class="number">0</span> - (<span class="built_in">sizeof</span>(<span class="type">header_t</span>) + node-&gt;head.size)) == (<span class="type">void</span> *)<span class="number">-1</span>) &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s errno: %s\n&quot;</span>, __func__, <span class="built_in">strerror</span>(ENOMEM));</span><br><span class="line">  <span class="built_in">pthrad_mutex_unlock</span>(&amp;list_locker);</span><br><span class="line"><span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-number">1.</span> <span class="toc-text">如何实现一个简单内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%93%8D%E6%8E%A7brk%E6%8C%87%E9%92%88"><span class="toc-number">1.1.</span> <span class="toc-text">如何操控brk指针</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%A4%B4%E9%83%A8%E5%88%86"><span class="toc-number">1.2.</span> <span class="toc-text">添加头部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.</span> <span class="toc-text">关于内存对齐问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#malloc%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">1.4.</span> <span class="toc-text">malloc核心代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#free%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-number">1.5.</span> <span class="toc-text">free核心代码</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&text=Custom Memory Allocator"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&is_video=false&description=Custom Memory Allocator"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Custom Memory Allocator&body=Check out this article: https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&title=Custom Memory Allocator"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&name=Custom Memory Allocator&description=&lt;h1 id=&#34;如何实现一个简单内存分配&#34;&gt;&lt;a href=&#34;#如何实现一个简单内存分配&#34; class=&#34;headerlink&#34; title=&#34;如何实现一个简单内存分配&#34;&gt;&lt;/a&gt;如何实现一个简单内存分配&lt;/h1&gt;&lt;p&gt;具体代码可以参考我这里实现的&lt;a href=&#34;https://github.com/WageCo/mmemory&#34;&gt;简单动态内存分配&lt;/a&gt;&lt;br&gt;这里仅仅只是实现了的内存的分配，之后还需要实现内存池，并且通过栈的方式进行管理才能方便使用。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wageco.github.io/2022/04/11/2022-4-11-MemoryAllocator/&t=Custom Memory Allocator"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2025
+    WageCo
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

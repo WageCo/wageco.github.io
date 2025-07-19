@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="色彩模型RGB通过对R, G, B三个颜色通道的变化, 并把他们相互叠加, 显示多种色彩. RGB颜色标准R: red, G: green, B: blue.  此三基色可以根据占比不同组建其他颜色.  RGB格式标准RGB后面的位数表示1个像素所使用的位数. RGB1, RGB4, RGB8, RGB16, RGB24, RGB32, ARGB32.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RGB_AND_YUV">
+<meta property="og:url" content="https://wageco.github.io/2022/01/09/RGB-AND-YUV/index.html">
+<meta property="og:site_name" content="WageCo&#39;s Blog">
+<meta property="og:description" content="色彩模型RGB通过对R, G, B三个颜色通道的变化, 并把他们相互叠加, 显示多种色彩. RGB颜色标准R: red, G: green, B: blue.  此三基色可以根据占比不同组建其他颜色.  RGB格式标准RGB后面的位数表示1个像素所使用的位数. RGB1, RGB4, RGB8, RGB16, RGB24, RGB32, ARGB32.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-09T14:59:37.000Z">
+<meta property="article:modified_time" content="2025-05-16T17:30:36.505Z">
+<meta property="article:author" content="WageCo">
+<meta property="article:tag" content="音视频基础">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>RGB_AND_YUV</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2022/01/26/GCCLinkNewGlibc/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wageco.github.io/2022/01/09/RGB-AND-YUV/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&text=RGB_AND_YUV"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&is_video=false&description=RGB_AND_YUV"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RGB_AND_YUV&body=Check out this article: https://wageco.github.io/2022/01/09/RGB-AND-YUV/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&name=RGB_AND_YUV&description=&lt;h1 id=&#34;色彩模型&#34;&gt;&lt;a href=&#34;#色彩模型&#34; class=&#34;headerlink&#34; title=&#34;色彩模型&#34;&gt;&lt;/a&gt;色彩模型&lt;/h1&gt;&lt;h2 id=&#34;RGB&#34;&gt;&lt;a href=&#34;#RGB&#34; class=&#34;headerlink&#34; title=&#34;RGB&#34;&gt;&lt;/a&gt;RGB&lt;/h2&gt;&lt;p&gt;通过对R, G, B三个颜色通道的变化, 并把他们相互叠加, 显示多种色彩.&lt;/p&gt;
+&lt;h3 id=&#34;RGB颜色标准&#34;&gt;&lt;a href=&#34;#RGB颜色标准&#34; class=&#34;headerlink&#34; title=&#34;RGB颜色标准&#34;&gt;&lt;/a&gt;RGB颜色标准&lt;/h3&gt;&lt;p&gt;&lt;code&gt;R&lt;/code&gt;: red, &lt;code&gt;G&lt;/code&gt;: green, &lt;code&gt;B&lt;/code&gt;: blue.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;此三基色可以根据占比不同组建其他颜色.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;RGB格式标准&#34;&gt;&lt;a href=&#34;#RGB格式标准&#34; class=&#34;headerlink&#34; title=&#34;RGB格式标准&#34;&gt;&lt;/a&gt;RGB格式标准&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;RGB后面的位数表示1个像素所使用的位数.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RGB1, RGB4, RGB8, RGB16, RGB24, RGB32, ARGB32.&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&t=RGB_AND_YUV"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%89%B2%E5%BD%A9%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">色彩模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RGB"><span class="toc-number">1.1.</span> <span class="toc-text">RGB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RGB%E9%A2%9C%E8%89%B2%E6%A0%87%E5%87%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">RGB颜色标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RGB%E6%A0%BC%E5%BC%8F%E6%A0%87%E5%87%86"><span class="toc-number">1.1.2.</span> <span class="toc-text">RGB格式标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YUV"><span class="toc-number">1.2.</span> <span class="toc-text">YUV</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#YUV%E9%A2%9C%E8%89%B2%E6%A0%87%E5%87%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">YUV颜色标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YUV%E6%A0%BC%E5%BC%8F%E6%A0%87%E5%87%86"><span class="toc-number">1.2.2.</span> <span class="toc-text">YUV格式标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">1.2.3.</span> <span class="toc-text">兼容性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RGB%E4%B8%8EYUV%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.3.</span> <span class="toc-text">RGB与YUV之间的转换</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        RGB_AND_YUV
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">WageCo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-01-09T14:59:37.000Z" class="dt-published" itemprop="datePublished">2022-01-09</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80/" rel="tag">音视频基础</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="色彩模型"><a href="#色彩模型" class="headerlink" title="色彩模型"></a>色彩模型</h1><h2 id="RGB"><a href="#RGB" class="headerlink" title="RGB"></a>RGB</h2><p>通过对R, G, B三个颜色通道的变化, 并把他们相互叠加, 显示多种色彩.</p>
+<h3 id="RGB颜色标准"><a href="#RGB颜色标准" class="headerlink" title="RGB颜色标准"></a>RGB颜色标准</h3><p><code>R</code>: red, <code>G</code>: green, <code>B</code>: blue.</p>
+<blockquote>
+<p>此三基色可以根据占比不同组建其他颜色.</p>
+</blockquote>
+<h3 id="RGB格式标准"><a href="#RGB格式标准" class="headerlink" title="RGB格式标准"></a>RGB格式标准</h3><p><strong>RGB后面的位数表示1个像素所使用的位数.</strong></p>
+<p>RGB1, RGB4, RGB8, RGB16, RGB24, RGB32, ARGB32.</p>
+<span id="more"></span>
+<blockquote>
+<p>RGB 1位可以表示2色. RGB 4位可以表示16色, RGB 8位可以表示256色, 位数越多, 显示的颜色越丰富. 24位以上即表示真彩色.</p>
+</blockquote>
+<blockquote>
+<p>RGB 24位与32位是一样的, 三个分量都是占8位, 多余的位弃用, 而ARGB 32中, 多余的8位用来标记Alpha通道.</p>
+</blockquote>
+<h2 id="YUV"><a href="#YUV" class="headerlink" title="YUV"></a>YUV</h2><p>由于人眼对亮度的分辨率的敏感度高于色彩的分辨率的敏感度, 把亮度与色度进行分离, 增强亮度, 减少色度, 进而压缩空间.</p>
+<h3 id="YUV颜色标准"><a href="#YUV颜色标准" class="headerlink" title="YUV颜色标准"></a>YUV颜色标准</h3><p>Y: 亮度, U和V: 色度.  </p>
+<p>亮度一般是值0-255的黑白色, 而色度表示像素的颜色.  </p>
+<blockquote>
+<p>简单的说, 只有Y就是一组黑白照片, 而U和V是一组色块分布图, 两者一组合就成为了彩色照片.</p>
+</blockquote>
+<h3 id="YUV格式标准"><a href="#YUV格式标准" class="headerlink" title="YUV格式标准"></a>YUV格式标准</h3><p>YUV的格式标准有很多, 三者的采样比例, 主要有4:4:4, 4:2:2, 4:1:1, 4:2:0.</p>
+<blockquote>
+<p>可以理解成, 在一个矩形点阵上, 每一个点可以由最多Y,U,V三个分量组成, 进行行扫描与列扫描.</p>
+</blockquote>
+<p><code>4:4:4</code>: YUV三信道的抽样率一样.</p>
+<blockquote>
+<p>每个点都是有Y, U, V组成.</p>
+</blockquote>
+<p><code>4:2:2</code>: 在水平抽样中亮度与色度比例为 2:1, 垂直抽样率 1:1</p>
+<blockquote>
+<p>每行的每个点以2:1的比例, 分别由Y组成以及Y, U, V组成.</p>
+</blockquote>
+<p><code>4:1:1</code>: 在水平抽样中亮度与色度比例为 4:1, 垂直抽样率 1:1</p>
+<blockquote>
+<p>每行的每个点以4:1的比例, 分别由Y组成以及Y, U, V组成.</p>
+</blockquote>
+<p><code>4:2:0</code>: 在水平抽样中亮度与色度比例是 2:1, 垂直抽样是 2:1</p>
+<blockquote>
+<p>每行的每个点以2:1的比例, 分别由Y组成以及 Y, U或者Y, V 组成.<br>每列上由Y, U或者Y, V 组成的点为1:1.</p>
+</blockquote>
+<h3 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h3><p>因为亮度与色度分离, 可以兼容古老的黑白电视.</p>
+<h2 id="RGB与YUV之间的转换"><a href="#RGB与YUV之间的转换" class="headerlink" title="RGB与YUV之间的转换"></a>RGB与YUV之间的转换</h2><p>BT601 (标清)</p>
+<blockquote>
+<p>数字RGB 转 数字YUV</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Y = (<span class="number">0.257</span> * R) + (<span class="number">0.504</span> * G) + (<span class="number">0.098</span> * B) + <span class="number">16</span></span><br><span class="line">U = -( <span class="number">0.148</span> * R) - (<span class="number">0.291</span> * G) + (<span class="number">0.439</span> * B) + <span class="number">128</span></span><br><span class="line">V = (<span class="number">0.439</span> * R) - (<span class="number">0.368</span> * G) - (<span class="number">0.071</span> * B) + <span class="number">128</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>数字YUV 转 数字RGB</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">B = <span class="number">1.164</span>(Y - <span class="number">16</span>) + <span class="number">2.018</span>(U - <span class="number">128</span>)</span><br><span class="line">G = <span class="number">1.164</span>(Y - <span class="number">16</span>) - <span class="number">0.813</span>(V - <span class="number">128</span>) - <span class="number">0.391</span>(U - <span class="number">128</span>)</span><br><span class="line">R = <span class="number">1.164</span>(Y - <span class="number">16</span>) + <span class="number">1.596</span>(V - <span class="number">128</span>)</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%89%B2%E5%BD%A9%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">色彩模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RGB"><span class="toc-number">1.1.</span> <span class="toc-text">RGB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RGB%E9%A2%9C%E8%89%B2%E6%A0%87%E5%87%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">RGB颜色标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RGB%E6%A0%BC%E5%BC%8F%E6%A0%87%E5%87%86"><span class="toc-number">1.1.2.</span> <span class="toc-text">RGB格式标准</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YUV"><span class="toc-number">1.2.</span> <span class="toc-text">YUV</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#YUV%E9%A2%9C%E8%89%B2%E6%A0%87%E5%87%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">YUV颜色标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YUV%E6%A0%BC%E5%BC%8F%E6%A0%87%E5%87%86"><span class="toc-number">1.2.2.</span> <span class="toc-text">YUV格式标准</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">1.2.3.</span> <span class="toc-text">兼容性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RGB%E4%B8%8EYUV%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.3.</span> <span class="toc-text">RGB与YUV之间的转换</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wageco.github.io/2022/01/09/RGB-AND-YUV/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&text=RGB_AND_YUV"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&is_video=false&description=RGB_AND_YUV"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RGB_AND_YUV&body=Check out this article: https://wageco.github.io/2022/01/09/RGB-AND-YUV/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&title=RGB_AND_YUV"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&name=RGB_AND_YUV&description=&lt;h1 id=&#34;色彩模型&#34;&gt;&lt;a href=&#34;#色彩模型&#34; class=&#34;headerlink&#34; title=&#34;色彩模型&#34;&gt;&lt;/a&gt;色彩模型&lt;/h1&gt;&lt;h2 id=&#34;RGB&#34;&gt;&lt;a href=&#34;#RGB&#34; class=&#34;headerlink&#34; title=&#34;RGB&#34;&gt;&lt;/a&gt;RGB&lt;/h2&gt;&lt;p&gt;通过对R, G, B三个颜色通道的变化, 并把他们相互叠加, 显示多种色彩.&lt;/p&gt;
+&lt;h3 id=&#34;RGB颜色标准&#34;&gt;&lt;a href=&#34;#RGB颜色标准&#34; class=&#34;headerlink&#34; title=&#34;RGB颜色标准&#34;&gt;&lt;/a&gt;RGB颜色标准&lt;/h3&gt;&lt;p&gt;&lt;code&gt;R&lt;/code&gt;: red, &lt;code&gt;G&lt;/code&gt;: green, &lt;code&gt;B&lt;/code&gt;: blue.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;此三基色可以根据占比不同组建其他颜色.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;RGB格式标准&#34;&gt;&lt;a href=&#34;#RGB格式标准&#34; class=&#34;headerlink&#34; title=&#34;RGB格式标准&#34;&gt;&lt;/a&gt;RGB格式标准&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;RGB后面的位数表示1个像素所使用的位数.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;RGB1, RGB4, RGB8, RGB16, RGB24, RGB32, ARGB32.&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wageco.github.io/2022/01/09/RGB-AND-YUV/&t=RGB_AND_YUV"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2025
+    WageCo
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

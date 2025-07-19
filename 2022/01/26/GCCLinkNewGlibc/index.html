@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&amp;#x">
+<meta property="og:type" content="article">
+<meta property="og:title" content="调用Cmake连接指定的GLIBC">
+<meta property="og:url" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/index.html">
+<meta property="og:site_name" content="WageCo&#39;s Blog">
+<meta property="og:description" content="如何使用CMAKE或者GCC连接指定的GLIBC运行程序安装新的GLIBC 2.34wget 下载源码包  wget https:&#x2F;&#x2F;ftp.gnu.org&#x2F;gnu&#x2F;glibc&#x2F;glibc-2.34.tar.gz  tar 解压压缩包  tar xzfv glibc-2.34.tar.gz  configure 设置一下安装路径  .&#x2F;configure –prefix&#x3D;&amp;#x">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png">
+<meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-2.png">
+<meta property="og:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-3.png">
+<meta property="article:published_time" content="2022-01-25T16:48:47.000Z">
+<meta property="article:modified_time" content="2025-05-16T17:30:36.504Z">
+<meta property="article:author" content="WageCo">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>调用Cmake连接指定的GLIBC</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2022/04/11/2022-4-11-MemoryAllocator/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2022/01/09/RGB-AND-YUV/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&text=调用Cmake连接指定的GLIBC"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&is_video=false&description=调用Cmake连接指定的GLIBC"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=调用Cmake连接指定的GLIBC&body=Check out this article: https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&name=调用Cmake连接指定的GLIBC&description=&lt;h1 id=&#34;如何使用CMAKE或者GCC连接指定的GLIBC运行程序&#34;&gt;&lt;a href=&#34;#如何使用CMAKE或者GCC连接指定的GLIBC运行程序&#34; class=&#34;headerlink&#34; title=&#34;如何使用CMAKE或者GCC连接指定的GLIBC运行程序&#34;&gt;&lt;/a&gt;如何使用CMAKE或者GCC连接指定的GLIBC运行程序&lt;/h1&gt;&lt;h2 id=&#34;安装新的GLIBC-2-34&#34;&gt;&lt;a href=&#34;#安装新的GLIBC-2-34&#34; class=&#34;headerlink&#34; title=&#34;安装新的GLIBC 2.34&#34;&gt;&lt;/a&gt;安装新的GLIBC 2.34&lt;/h2&gt;&lt;p&gt;&lt;code&gt;wget&lt;/code&gt; 下载源码包&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;wget &lt;a href=&#34;https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz&#34;&gt;https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;tar&lt;/code&gt; 解压压缩包&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;tar xzfv glibc-2.34.tar.gz&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;configure&lt;/code&gt; 设置一下安装路径&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;.&amp;#x2F;configure –prefix&amp;#x3D;&amp;#x2F;opt&amp;#x2F;glibc-2.34&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;--prefix=&lt;/code&gt; 你要存放的路径(建议不要覆盖自带的GLIBC)&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&t=调用Cmake连接指定的GLIBC"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CMAKE%E6%88%96%E8%80%85GCC%E8%BF%9E%E6%8E%A5%E6%8C%87%E5%AE%9A%E7%9A%84GLIBC%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">如何使用CMAKE或者GCC连接指定的GLIBC运行程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%96%B0%E7%9A%84GLIBC-2-34"><span class="toc-number">1.1.</span> <span class="toc-text">安装新的GLIBC 2.34</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">测试用例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GCC%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="toc-number">1.3.</span> <span class="toc-text">GCC编译命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMAKE%E7%BC%96%E8%AF%91"><span class="toc-number">1.4.</span> <span class="toc-text">CMAKE编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">1.5.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        调用Cmake连接指定的GLIBC
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">WageCo</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-01-25T16:48:47.000Z" class="dt-published" itemprop="datePublished">2022-01-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/C-%E7%9B%B8%E5%85%B3/">C++相关</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/C/" rel="tag">C++</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="如何使用CMAKE或者GCC连接指定的GLIBC运行程序"><a href="#如何使用CMAKE或者GCC连接指定的GLIBC运行程序" class="headerlink" title="如何使用CMAKE或者GCC连接指定的GLIBC运行程序"></a>如何使用CMAKE或者GCC连接指定的GLIBC运行程序</h1><h2 id="安装新的GLIBC-2-34"><a href="#安装新的GLIBC-2-34" class="headerlink" title="安装新的GLIBC 2.34"></a>安装新的GLIBC 2.34</h2><p><code>wget</code> 下载源码包</p>
+<blockquote>
+<p>wget <a target="_blank" rel="noopener" href="https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz">https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz</a></p>
+</blockquote>
+<p><code>tar</code> 解压压缩包</p>
+<blockquote>
+<p>tar xzfv glibc-2.34.tar.gz</p>
+</blockquote>
+<p><code>configure</code> 设置一下安装路径</p>
+<blockquote>
+<p>.&#x2F;configure –prefix&#x3D;&#x2F;opt&#x2F;glibc-2.34</p>
+</blockquote>
+<p><code>--prefix=</code> 你要存放的路径(建议不要覆盖自带的GLIBC)</p>
+<span id="more"></span>
+
+<blockquote>
+<p>make -j4</p>
+</blockquote>
+<p><code>-j</code> 你需要开启的线程数目(用来<strong>加快编译速度</strong>)</p>
+<blockquote>
+<p>sudo make install</p>
+</blockquote>
+<p><code>sudo</code> 因为我是安装到&#x2F;opt目录下, 所以需要<code>sudo</code></p>
+<h2 id="测试用例"><a href="#测试用例" class="headerlink" title="测试用例"></a>测试用例</h2><p>转自 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9705660/check-glibc-version-for-a-particular-gcc-compiler">https://stackoverflow.com/questions/9705660/check-glibc-version-for-a-particular-gcc-compiler</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span>  __GLIBC__</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;gnu/libc-version.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __GLIBC__</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;GNU libc compile-time version: %u.%u\n&quot;</span>, __GLIBC__,  __GLIBC_MINOR__);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;GNU libc runtime version:      %s\n&quot;</span>, <span class="built_in">gnu_get_libc_version</span>());</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">&quot;Not the GNU C Library&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>简单运行一遍</p>
+<p><img src="/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-1.png" alt="GCCLinkNewGlibc-1"></p>
+<blockquote>
+<p>我系统自带的是GLIBC3.31</p>
+</blockquote>
+<h2 id="GCC编译命令"><a href="#GCC编译命令" class="headerlink" title="GCC编译命令"></a>GCC编译命令</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -std=c++11 ../helloworld.cc -Wl,--rpath=/opt/glibc-2.34/lib -Wl,--dynamic-linker=/opt/glibc-2.34/lib/ld-linux-x86-64.so.2</span><br></pre></td></tr></table></figure>
+<p><code>-Wl,--rpath=</code> 重新指定库的路径<br><code>-Wl,--dynamic-linker=</code> 指定动态连接库</p>
+<p><img src="/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-2.png" alt="GCCLinkNewGlibc-2"></p>
+<h2 id="CMAKE编译"><a href="#CMAKE编译" class="headerlink" title="CMAKE编译"></a>CMAKE编译</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.15</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(helloworld)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(./)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_compile_options</span>(<span class="string">&quot;-std=c++11&quot;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;-Wl,--rpath=/opt/glibc-2.34/lib -Wl,--dynamic-linker=/opt/glibc-2.34/lib/ld-linux-x86-64.so.2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(hello helloworld.cc)</span><br></pre></td></tr></table></figure>
+
+<p>主要的是<code>add_compile_options</code>中关于<code>CXXFLAGS</code>,其实这个跟GCC一样</p>
+<p><img src="/2022/01/26/GCCLinkNewGlibc/GCCLinkNewGlibc-3.png" alt="GCCLinkNewGlibc-3"></p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>调用<code>rpath</code>以及<code>dynamic-linker</code>可以指定<code>GLIBC</code></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/about/">关于</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8CMAKE%E6%88%96%E8%80%85GCC%E8%BF%9E%E6%8E%A5%E6%8C%87%E5%AE%9A%E7%9A%84GLIBC%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">如何使用CMAKE或者GCC连接指定的GLIBC运行程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%96%B0%E7%9A%84GLIBC-2-34"><span class="toc-number">1.1.</span> <span class="toc-text">安装新的GLIBC 2.34</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">1.2.</span> <span class="toc-text">测试用例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GCC%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="toc-number">1.3.</span> <span class="toc-text">GCC编译命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMAKE%E7%BC%96%E8%AF%91"><span class="toc-number">1.4.</span> <span class="toc-text">CMAKE编译</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">1.5.</span> <span class="toc-text">结论</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&text=调用Cmake连接指定的GLIBC"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&is_video=false&description=调用Cmake连接指定的GLIBC"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=调用Cmake连接指定的GLIBC&body=Check out this article: https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&title=调用Cmake连接指定的GLIBC"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&name=调用Cmake连接指定的GLIBC&description=&lt;h1 id=&#34;如何使用CMAKE或者GCC连接指定的GLIBC运行程序&#34;&gt;&lt;a href=&#34;#如何使用CMAKE或者GCC连接指定的GLIBC运行程序&#34; class=&#34;headerlink&#34; title=&#34;如何使用CMAKE或者GCC连接指定的GLIBC运行程序&#34;&gt;&lt;/a&gt;如何使用CMAKE或者GCC连接指定的GLIBC运行程序&lt;/h1&gt;&lt;h2 id=&#34;安装新的GLIBC-2-34&#34;&gt;&lt;a href=&#34;#安装新的GLIBC-2-34&#34; class=&#34;headerlink&#34; title=&#34;安装新的GLIBC 2.34&#34;&gt;&lt;/a&gt;安装新的GLIBC 2.34&lt;/h2&gt;&lt;p&gt;&lt;code&gt;wget&lt;/code&gt; 下载源码包&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;wget &lt;a href=&#34;https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz&#34;&gt;https://ftp.gnu.org/gnu/glibc/glibc-2.34.tar.gz&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;tar&lt;/code&gt; 解压压缩包&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;tar xzfv glibc-2.34.tar.gz&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;configure&lt;/code&gt; 设置一下安装路径&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;.&amp;#x2F;configure –prefix&amp;#x3D;&amp;#x2F;opt&amp;#x2F;glibc-2.34&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;--prefix=&lt;/code&gt; 你要存放的路径(建议不要覆盖自带的GLIBC)&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://wageco.github.io/2022/01/26/GCCLinkNewGlibc/&t=调用Cmake连接指定的GLIBC"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2025
+    WageCo
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/about/">关于</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/wageco">项目</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
